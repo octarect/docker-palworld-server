@@ -19,17 +19,40 @@ is_server_installed() {
 }
 
 log() {
-    severity="$1"
-    message="$2"
-    printf "[%s] %s\n" "${severity^^}" "$message"
+    case "$1" in
+        -i)
+            severity="INFO"
+            shift
+            ;;
+        -w)
+            severity="WARN"
+            shift
+            ;;
+        -e)
+            severity="ERROR"
+            shift
+            ;;
+        *)
+            severity="INFO"
+            ;;
+    esac
+
+    message="$1"
+    log_contents="$(printf "[%s] %s\n" "${severity^^}" "$message")"
+
+    if [[ "$severity" = "ERROR" ]]; then
+        echo "$log_contents" 2>&1
+    else
+        echo "$log_contents"
+    fi
 }
 
 if ! is_server_installed; then
-    log info "The server hasn't been installed yet."
+    log "The server hasn't been installed yet."
     install_server
 fi
 
-log info "Starting the server..."
+log "Starting the server..."
 
 if [[ "$MULTITHREADING" == "true" ]]; then
     SERVER_OPTS+=("-useperfthreads" "-NoAsyncLoadingThread" "-UseMultithreadForDS")
