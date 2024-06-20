@@ -8,7 +8,7 @@ SERVER_OPTS="$SERVER_OPTS"
 MULTITHREADING="false"
 
 install_server() {
-  FEXBash "$STEAMCMD +force_install_dir $INSTALL_DIR +login anonymous +app_update 2394010 validate +quit"
+  su steam -c "FEXBash \"$STEAMCMD +force_install_dir $INSTALL_DIR +login anonymous +app_update 2394010 validate +quit\""
 }
 
 is_server_installed() {
@@ -35,4 +35,4 @@ if [[ "$MULTITHREADING" == "true" ]]; then
     SERVER_OPTS+=("-useperfthreads" "-NoAsyncLoadingThread" "-UseMultithreadForDS")
 fi
 
-FEXBash "$INSTALL_DIR/PalServer.sh $SERVER_OPTS"
+su steam -c "FEXBash \"$INSTALL_DIR/PalServer.sh $SERVER_OPTS\""

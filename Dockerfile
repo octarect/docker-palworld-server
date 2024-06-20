@@ -67,10 +67,10 @@ WORKDIR /home/steam/Steam
 
 RUN curl -sqL "https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz" | tar zxvf -
 
+USER root
+
 COPY --from=fex-builder /usr/bin/FEX* /usr/bin/
 COPY --from=rootfs-fetcher --chown=steam:steam /root/.fex-emu /home/steam/.fex-emu
 COPY --chmod=0755 scripts/entrypoint.sh /usr/local/bin/
-
-ENTRYPOINT FEXBash ./steamcmd.sh
 
 ENTRYPOINT entrypoint.sh
