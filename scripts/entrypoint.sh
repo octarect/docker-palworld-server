@@ -52,10 +52,11 @@ if ! is_server_installed; then
     install_server
 fi
 
-log "Starting the server..."
+log "Generating PalWorldSettings.ini"
+confgen PalWorldSettings.ini > $INSTALL_DIR/Pal/Saved/Config/LinuxServer/PalWorldSettings.ini
 
+log "Starting the server..."
 if [[ "$MULTITHREADING" == "true" ]]; then
     SERVER_OPTS+=("-useperfthreads" "-NoAsyncLoadingThread" "-UseMultithreadForDS")
 fi
-
 su steam -c "FEXBash \"$INSTALL_DIR/PalServer.sh $SERVER_OPTS\""

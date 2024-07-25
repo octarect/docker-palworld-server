@@ -34,6 +34,7 @@ RUN git clone --recurse-submodules https://github.com/FEX-Emu/FEX.git \
  && ninja \
  && ninja install
 
+############################################################
 FROM arm64v8/ubuntu:22.04 AS rootfs-fetcher
 
 COPY --from=fex-builder /usr/bin/FEX* /usr/bin/
@@ -49,6 +50,18 @@ RUN apt update \
 RUN unbuffer FEXRootFSFetcher -x -y \
  && rm /root/.fex-emu/RootFS/Ubuntu_22_04.sqsh
 
+############################################################
+FROM arm64v8/golang:1.22 AS tools-builder
+
+WORKDIR /opt/app
+
+COPY go.mod go.sum ./
+RUN go mod download && go mod verify
+
+COPY . .
+RUN go build -v -o /usr/local/bin ./tools/...
+
+############################################################
 FROM arm64v8/ubuntu:22.04
 
 RUN apt update \
@@ -71,6 +84,7 @@ USER root
 
 COPY --from=fex-builder /usr/bin/FEX* /usr/bin/
 COPY --from=rootfs-fetcher --chown=steam:steam /root/.fex-emu /home/steam/.fex-emu
+COPY --from=tools-builder /usr/local/bin/* /usr/local/bin/
 COPY --chmod=0755 scripts/entrypoint.sh /usr/local/bin/
 
 ENTRYPOINT entrypoint.sh
