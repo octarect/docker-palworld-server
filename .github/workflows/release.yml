@@ -1,12 +1,9 @@
-name: Publish an image on default branch
+name: Release
+
 on:
   push:
-    branches:
-      - master
-    paths: 
-      - Dockerfile
-      - scripts/entrypoint.sh
-  workflow_dispatch:
+    tags:
+      - v*
 
 jobs:
   release:
@@ -34,8 +31,9 @@ jobs:
           images: |
             ghcr.io/${{ github.repository }}
           tags: |
-            type=raw,value=latest,enable={{ is_default_branch }}
-            type=raw,value={{ date 'YYYY-MM-DD' }}
+            type=raw,value=latest
+            type=semver,pattern=v{{ version }}
+            type=semver,pattern=v{{ major }}.{{ minor }}
 
       - name: Build and push
         uses: docker/build-push-action@v5
@@ -45,3 +43,11 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+      - name: Create Release
+        uses: actions/create-release@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: ${{ github.ref }}
