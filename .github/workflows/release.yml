@@ -1,8 +1,13 @@
 name:  Release
 on:
   push:
-    branches: ["master"]
-    paths: ["Dockerfile", "scripts/entrypoint.sh"]
+    branches:
+      - master
+    paths: 
+      - Dockerfile
+      - scripts/entrypoint.sh
+    tags:
+      - v*
   workflow_dispatch:
 
 jobs:
@@ -33,6 +38,8 @@ jobs:
           tags: |
             type=raw,value=latest,enable={{ is_default_branch }}
             type=raw,value={{ date 'YYYY-MM-DD' }}
+            type=semver,pattern=v{{ version }}
+            type=semver,pattern=v{{ major }}.{{ minor }}
 
       - name: Build and push
         uses: docker/build-push-action@v5
