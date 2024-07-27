@@ -1,4 +1,6 @@
-FROM arm64v8/ubuntu:22.04 AS fex-builder
+FROM --platform=linux/arm64 ubuntu:22.04 AS fex-builder_arm64
+
+ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt update \
  && apt install -y \
@@ -34,15 +36,7 @@ RUN git clone --recurse-submodules https://github.com/FEX-Emu/FEX.git \
  && ninja \
  && ninja install
 
-############################################################
-FROM arm64v8/ubuntu:22.04 AS rootfs-fetcher
-
-COPY --from=fex-builder /usr/bin/FEX* /usr/bin/
-
-ENV DEBIAN_FRONTEND=noninteractive
-
-RUN apt update \
- && apt install -y \
+RUN apt install -y \
     expect-dev \
     curl \
     squashfs-tools
@@ -51,7 +45,19 @@ RUN unbuffer FEXRootFSFetcher -x -y \
  && rm /root/.fex-emu/RootFS/Ubuntu_22_04.sqsh
 
 ############################################################
-FROM arm64v8/golang:1.22 AS tools-builder
+FROM --platform=linux/arm64 ubuntu:22.04 AS base_arm64
+
+COPY --from=fex-builder_arm64 /usr/bin/FEX* /usr/bin/
+COPY --from=fex-builder_arm64 --chown=steam:steam /root/.fex-emu /home/steam/.fex-emu
+
+############################################################
+FROM --platform=linux/amd64 ubuntu:22.04 AS base_amd64
+
+RUN apt update \
+ && apt install -y lib32gcc-s1
+
+############################################################
+FROM golang:1.22 AS tools-builder
 
 WORKDIR /opt/app
 
@@ -62,15 +68,14 @@ COPY . .
 RUN go build -v -o /usr/local/bin ./tools/...
 
 ############################################################
-FROM arm64v8/ubuntu:22.04
+FROM base_${TARGETARCH}
 
 RUN apt update \
  && apt install -y \
     bash \
     curl \
-    sudo
-
-RUN useradd -m -s /bin/bash steam \
+    sudo \
+ && useradd -m -s /bin/bash steam \
  && usermod -aG sudo steam \
  && echo "steam ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers.d/steam
 
@@ -82,9 +87,7 @@ RUN curl -sqL "https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.t
 
 USER root
 
-COPY --from=fex-builder /usr/bin/FEX* /usr/bin/
-COPY --from=rootfs-fetcher --chown=steam:steam /root/.fex-emu /home/steam/.fex-emu
 COPY --from=tools-builder /usr/local/bin/* /usr/local/bin/
 COPY --chmod=0755 scripts/entrypoint.sh /usr/local/bin/
 
-ENTRYPOINT entrypoint.sh
+ENTRYPOINT ["entrypoint.sh"]

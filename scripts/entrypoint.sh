@@ -7,8 +7,17 @@ INSTALL_DIR="${INSTALL_DIR:-/palworld}"
 SERVER_OPTS="$SERVER_OPTS"
 MULTITHREADING="false"
 
+steamdo() {
+    cmd="$@"
+    if [[ "$(uname -m)" = "x86_64" ]]; then
+        su steam -c "$cmd"
+    else
+        su steam -c "FEXBash \"$cmd\""
+    fi
+}
+
 install_server() {
-  su steam -c "FEXBash \"$STEAMCMD +force_install_dir $INSTALL_DIR +login anonymous +app_update 2394010 validate +quit\""
+  steamdo $STEAMCMD +force_install_dir $INSTALL_DIR +login anonymous +app_update 2394010 validate +quit
 }
 
 is_server_installed() {
@@ -53,10 +62,13 @@ if ! is_server_installed; then
 fi
 
 log "Generating PalWorldSettings.ini"
-confgen PalWorldSettings.ini > $INSTALL_DIR/Pal/Saved/Config/LinuxServer/PalWorldSettings.ini
+settings_ini_path="$INSTALL_DIR/Pal/Saved/Config/LinuxServer/PalWorldSettings.ini"
+mkdir -p $(dirname $settings_ini_path)
+confgen PalWorldSettings.ini > $settings_ini_path
+chown steam: $settings_ini_path
 
 log "Starting the server..."
 if [[ "$MULTITHREADING" == "true" ]]; then
     SERVER_OPTS+=("-useperfthreads" "-NoAsyncLoadingThread" "-UseMultithreadForDS")
 fi
-su steam -c "FEXBash \"$INSTALL_DIR/PalServer.sh $SERVER_OPTS\""
+steamdo $INSTALL_DIR/PalServer.sh $SERVER_OPTS
