@@ -45,13 +45,25 @@ RUN unbuffer FEXRootFSFetcher -x -y \
  && rm /root/.fex-emu/RootFS/Ubuntu_22_04.sqsh
 
 ############################################################
-FROM --platform=linux/arm64 ubuntu:22.04 AS base_arm64
+FROM ubuntu:22.04 AS base
+
+RUN apt update \
+ && apt install -y \
+    bash \
+    curl \
+    sudo \
+ && useradd -m -s /bin/bash steam \
+ && usermod -aG sudo steam \
+ && echo "steam ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers.d/steam
+
+############################################################
+FROM --platform=linux/arm64 base AS base_arm64
 
 COPY --from=fex-builder_arm64 /usr/bin/FEX* /usr/bin/
 COPY --from=fex-builder_arm64 --chown=steam:steam /root/.fex-emu /home/steam/.fex-emu
 
 ############################################################
-FROM --platform=linux/amd64 ubuntu:22.04 AS base_amd64
+FROM --platform=linux/amd64 base AS base_amd64
 
 RUN apt update \
  && apt install -y lib32gcc-s1
@@ -69,15 +81,6 @@ RUN go build -v -o /usr/local/bin ./tools/...
 
 ############################################################
 FROM base_${TARGETARCH}
-
-RUN apt update \
- && apt install -y \
-    bash \
-    curl \
-    sudo \
- && useradd -m -s /bin/bash steam \
- && usermod -aG sudo steam \
- && echo "steam ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers.d/steam
 
 USER steam
 
