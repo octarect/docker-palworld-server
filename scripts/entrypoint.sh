@@ -56,6 +56,11 @@ log() {
     fi
 }
 
+if ! steamdo touch "$INSTALL_DIR" 2>/dev/null; then
+    log -e "$INSTALL_DIR is not writable. Trying to change the ownership..."
+    chown -R steam: $INSTALL_DIR
+fi
+
 if ! is_server_installed; then
     log "The server hasn't been installed yet."
     install_server
