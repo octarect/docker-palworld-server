@@ -34,7 +34,6 @@ jobs:
           images: |
             ghcr.io/${{ github.repository }}
           tags: |
-            type=raw,value=latest,enable={{ is_default_branch }}
             type=raw,value={{ date 'YYYY-MM-DD' }}
 
       - name: Build and push
