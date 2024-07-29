@@ -86,8 +86,9 @@ if [[ "${ENABLE_ENGINE_OPTIMIZATION,,}" = "true" ]]; then
 fi
 
 log "Starting the server..."
+SERVER_OPTS=()
 if [[ "${ENABLE_MULTITHREAD,,}" = "true" ]]; then
     SERVER_OPTS+=("-useperfthreads" "-NoAsyncLoadingThread" "-UseMultithreadForDS")
 fi
-log "CMD: $INSTALL_DIR/PalServer.sh $SERVER_OPTS"
-steamdo $INSTALL_DIR/PalServer.sh $SERVER_OPTS
+log "CMD: $INSTALL_DIR/PalServer.sh ${SERVER_OPTS[@]}"
+steamdo $INSTALL_DIR/PalServer.sh ${SERVER_OPTS[@]}
