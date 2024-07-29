@@ -6,6 +6,7 @@ STEAMCMD=/home/steam/Steam/steamcmd.sh
 INSTALL_DIR="${INSTALL_DIR:-/palworld}"
 SERVER_OPTS="$SERVER_OPTS"
 MULTI_THREADING="${MULTI_THREADING:-true}"
+UPDATE_ON_START="${UPDATE_ON_START:-false}"
 
 steamdo() {
     cmd="$@"
@@ -63,6 +64,11 @@ fi
 
 if ! is_server_installed; then
     log "The server hasn't been installed yet."
+    install_server
+    UPDATE_ON_START="false"
+fi
+if [[ "${UPDATE_ON_START,,}" = "true" ]]; then
+    log "UPDATE_ON_START is true. steamcmd will be updated."
     install_server
 fi
 
