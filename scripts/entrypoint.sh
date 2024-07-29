@@ -89,4 +89,5 @@ log "Starting the server..."
 if [[ "${ENABLE_MULTITHREAD,,}" = "true" ]]; then
     SERVER_OPTS+=("-useperfthreads" "-NoAsyncLoadingThread" "-UseMultithreadForDS")
 fi
+log "CMD: $INSTALL_DIR/PalServer.sh $SERVER_OPTS"
 steamdo $INSTALL_DIR/PalServer.sh $SERVER_OPTS
