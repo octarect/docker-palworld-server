@@ -48,7 +48,7 @@ log() {
             ;;
     esac
 
-    message="$1"
+    message="$@"
     log_contents="$(printf "[%s] %s\n" "${severity^^}" "$message")"
 
     if [[ "$severity" = "ERROR" ]]; then
