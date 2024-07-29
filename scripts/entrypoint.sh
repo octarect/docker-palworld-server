@@ -75,16 +75,14 @@ fi
 
 log "Generating PalWorldSettings.ini"
 settings_ini_path="$INSTALL_DIR/Pal/Saved/Config/LinuxServer/PalWorldSettings.ini"
-mkdir -p $(dirname $settings_ini_path)
-confgen PalWorldSettings.ini > $settings_ini_path
-chown steam: $settings_ini_path
+steamdo mkdir -p $(dirname $settings_ini_path)
+steamdo confgen PalWorldSettings.ini > $settings_ini_path
 
 if [[ "${ENABLE_ENGINE_OPTIMIZATION,,}" = "true" ]]; then
     log "Generating Engine.ini"
     engine_ini_path="$INSTALL_DIR/Pal/Saved/Config/LinuxServer/Engine.ini"
-    mkdir -p $(dirname $engine_ini_path)
-    confgen Engine.ini > $engine_ini_path
-    chown steam: $engine_ini_path
+    steamdo mkdir -p $(dirname $engine_ini_path)
+    steamdo confgen Engine.ini > $engine_ini_path
 fi
 
 log "Starting the server..."
