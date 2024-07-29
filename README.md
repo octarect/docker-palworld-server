@@ -25,10 +25,10 @@ You can change the settings by use the following environment variables:
 
 ### General
 
-| Variable        | Type | Default | Description                       |
-|:----------------|:----:|:--------|:----------------------------------|
-| UPDATE_ON_START | bool | `false` | Update a server on startup        |
-| MULTI_THREADING | bool | `true`  | Use multi threads to run a server |
+| Variable           | Type | Default | Description                       |
+|:-------------------|:----:|:--------|:----------------------------------|
+| UPDATE_ON_START    | bool | `false` | Update a server on startup        |
+| ENABLE_MULTITHREAD | bool | `true`  | Use multi threads to run a server |
 
 ### PalWorldSettings.ini
 

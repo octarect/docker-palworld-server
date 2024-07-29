@@ -5,7 +5,7 @@ set -e
 STEAMCMD=/home/steam/Steam/steamcmd.sh
 INSTALL_DIR="${INSTALL_DIR:-/palworld}"
 SERVER_OPTS="$SERVER_OPTS"
-MULTI_THREADING="${MULTI_THREADING:-true}"
+ENABLE_MULTITHREAD="${ENABLE_MULTITHREAD:-true}"
 UPDATE_ON_START="${UPDATE_ON_START:-false}"
 
 steamdo() {
@@ -79,7 +79,7 @@ confgen PalWorldSettings.ini > $settings_ini_path
 chown steam: $settings_ini_path
 
 log "Starting the server..."
-if [[ "${MULTI_THREADING,,}" = "true" ]]; then
+if [[ "${ENABLE_MULTITHREAD,,}" = "true" ]]; then
     SERVER_OPTS+=("-useperfthreads" "-NoAsyncLoadingThread" "-UseMultithreadForDS")
 fi
 steamdo $INSTALL_DIR/PalServer.sh $SERVER_OPTS
