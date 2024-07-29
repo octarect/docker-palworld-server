@@ -11,6 +11,8 @@ import (
 var (
 	//go:embed PalWorldSettings.ini.tmpl
 	palWorldSettings []byte
+	//go:embed Engine.ini.tmpl
+	engine []byte
 )
 
 func expr(lhs, rhs string) string {
@@ -22,6 +24,8 @@ func LoadTemplate(target string) (tmpl *template.Template, err error) {
 	switch target {
 	case "PalWorldSettings.ini":
 		bs = palWorldSettings
+	case "Engine.ini":
+		bs = engine
 	default:
 		err = fmt.Errorf("Unknown target specified. target=%s", target)
 		return

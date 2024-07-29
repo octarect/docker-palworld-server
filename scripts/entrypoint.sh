@@ -5,8 +5,9 @@ set -e
 STEAMCMD=/home/steam/Steam/steamcmd.sh
 INSTALL_DIR="${INSTALL_DIR:-/palworld}"
 SERVER_OPTS="$SERVER_OPTS"
-ENABLE_MULTITHREAD="${ENABLE_MULTITHREAD:-true}"
 UPDATE_ON_START="${UPDATE_ON_START:-false}"
+ENABLE_MULTITHREAD="${ENABLE_MULTITHREAD:-true}"
+ENABLE_ENGINE_OPTIMIZATION="${ENABLE_ENGINE_OPTIMIZATION:-false}"
 
 steamdo() {
     cmd="$@"
@@ -77,6 +78,14 @@ settings_ini_path="$INSTALL_DIR/Pal/Saved/Config/LinuxServer/PalWorldSettings.in
 mkdir -p $(dirname $settings_ini_path)
 confgen PalWorldSettings.ini > $settings_ini_path
 chown steam: $settings_ini_path
+
+if [[ "${ENABLE_ENGINE_OPTIMIZATION,,}" = "true" ]]; then
+    log "Generating Engine.ini"
+    engine_ini_path="$INSTALL_DIR/Pal/Saved/Config/LinuxServer/Engine.ini"
+    mkdir -p $(dirname $engine_ini_path)
+    confgen Engine.ini > $engine_ini_path
+    chown steam: $engine_ini_path
+fi
 
 log "Starting the server..."
 if [[ "${ENABLE_MULTITHREAD,,}" = "true" ]]; then

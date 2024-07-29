@@ -108,6 +108,33 @@ For details of each variable, see also official document: https://tech.palworldg
 | USE_AUTH                                  | bool   | `True`                                           |
 | WORKSPEED_RATE                            | float  | `1.000000`                                       |
 
+### Engine.ini
+
+> See also: [Optimizing PalWorld Dedicated Server: Engine.ini Settings to Reduce Lag and Rubberbanding - Reddit](https://www.reddit.com/r/Palworld/comments/19f6i19/optimizing_palworld_dedicated_server_engineini/)
+
+| Variable                   | Type | Default | Description                     |
+|:---------------------------|:----:|:--------|:--------------------------------|
+| ENABLE_ENGINE_OPTIMIZATION | bool | `false` | Generate an optimized Engine.ini |
+
+If you set `ENABLE_ENGINE_OPTIMIZATION=true`, you can customize each value in Engine.ini.
+(Of course, you can also use the generated file as-is.)
+
+| Variable                      | Type  | Default      |
+|:------------------------------|:-----:|:-------------|
+| LAN_SERVER_MAX_TICK_RATE      | int   | `120`        |
+| NET_SERVER_MAX_TICK_RATE      | int   | `120`        |
+| CONFIGURED_INTERNET_SPEED     | int   | `104857600`  |
+| CONFIGURED_LAN_SPEED          | int   | `104857600`  |
+| MAX_CLIENT_RATE               | int   | `104857600`  |
+| MAX_INTERNET_CLIENT_RATE      | int   | `104857600`  |
+| SMOOTH_FRAME_RATE             | bool  | `true`       |
+| USE_FIXED_FRAME_RATE          | bool  | `false`      |
+| SMOOTH_FRAME_RATE_LOWER_LIMIT | float | `30.000000`  |
+| SMOOTH_FRAME_RATE_UPPER_LIMIT | float | `120.000000` |
+| MIN_DESIRED_FRAME_RATE        | float | `60.000000`  |
+| FIXED_FRAME_RATE              | float | `120.000000` |
+| NET_CLIENT_TICKS_PER_SECOND   | int   | `120`        |
+
 ## License
 
 [MIT license](./LICENSE)
