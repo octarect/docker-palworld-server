@@ -23,6 +23,12 @@ docker container run --rm -d \
 
 You can change the settings by use the following environment variables:
 
+### General
+
+| Variable        | Type | Default | Description |
+|:----------------|:----:|:--------|:------------|
+| MULTI_THREADING | bool | `true`  | Use multi threads to run a server |
+
 ### PalWorldSettings.ini
 
 For details of each variable, see also official document: https://tech.palworldgame.com/settings-and-operation/configuration
