@@ -8,6 +8,7 @@ SERVER_OPTS="$SERVER_OPTS"
 UPDATE_ON_START="${UPDATE_ON_START:-false}"
 ENABLE_MULTITHREAD="${ENABLE_MULTITHREAD:-true}"
 ENABLE_ENGINE_OPTIMIZATION="${ENABLE_ENGINE_OPTIMIZATION:-false}"
+ENABLE_COMMUNITY_SERVER="${ENABLE_COMMUNITY_SERVER:-false}"
 
 steamdo() {
     cmd="$@"
@@ -89,6 +90,9 @@ log "Starting the server..."
 SERVER_OPTS=()
 if [[ "${ENABLE_MULTITHREAD,,}" = "true" ]]; then
     SERVER_OPTS+=("-useperfthreads" "-NoAsyncLoadingThread" "-UseMultithreadForDS")
+fi
+if [[ "${ENABLE_COMMUNITY_SERVER,,}" = "true" ]]; then
+    SERVER_OPTS+=("-publiclobby")
 fi
 log "CMD: $INSTALL_DIR/PalServer.sh ${SERVER_OPTS[@]}"
 steamdo $INSTALL_DIR/PalServer.sh ${SERVER_OPTS[@]}

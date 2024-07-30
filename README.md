@@ -25,10 +25,11 @@ You can change the settings by use the following environment variables:
 
 ### General
 
-| Variable           | Type | Default | Description                       |
-|:-------------------|:----:|:--------|:----------------------------------|
-| UPDATE_ON_START    | bool | `false` | Update a server on startup        |
-| ENABLE_MULTITHREAD | bool | `true`  | Use multi threads to run a server |
+| Variable                | Type | Default | Description                          |
+|:------------------------|:----:|:--------|:-------------------------------------|
+| UPDATE_ON_START         | bool | `false` | Update a server on startup           |
+| ENABLE_MULTITHREAD      | bool | `true`  | Use multi threads to run a server    |
+| ENABLE_COMMUNITY_SERVER | bool | `false` | Setup as a community server (public)<br>You may also want to set `PUBLIC_IP` if you host it in LAN. |
 
 ### PalWorldSettings.ini
 
