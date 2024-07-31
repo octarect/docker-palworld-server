@@ -1,5 +1,8 @@
 # docker-palworld-server
 
+[![Releases](https://img.shields.io/github/release/octarect/docker-palworld-server/all.svg)](https://github.com/octarect/docker-palworld-server/releases)
+[![GitHub](https://img.shields.io/github/license/octarect/docker-palworld-server)](https://github.com/octarect/docker-palworld-server/blob/master/LICENSE)
+
 This docker image provides a PalWorld server and some features to operate it easily.
 You can run and host the PalWorld server on a container.
 
